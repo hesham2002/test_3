@@ -1,34 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_3/cubits/get_weather_cubit/get_weather_cubit.dart';
-
-
-import 'package:test_3/screens/weather_info_details.dart';
+import 'package:test_3/cubits/weather_cubit/weather_cubit.dart';
+import 'package:test_3/models/weather_model.dart';
 import 'package:test_3/widgets/home_screen_body.dart';
+import 'package:test_3/widgets/weather_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
+   HomePage({super.key});
+WeatherModel? weatherModel;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<GetWeatherCubit, GetWeatherState>(
-        builder: (context, state) {
-          if (state is GetWeatherInitial) {
-            return HomeBody();
-          } else if (state is GetWeatherSuccsess) {
-            return WeatherInfoDetails(
-              weatherModel: state.weatherModel,
-            );
-          } else {
-            return Text('ooo error try again');
+      body: BlocBuilder<WeatherCubit,WeatherState>(builder: (context, state) {
+        if(state is WeatherInitial)
+          {
+           return HomeScreenBody();
           }
-        },
+        else if(state is WeatherLoading)
+        {
+         return Center(
+           child: CircularProgressIndicator(),
+         );
+        }
+        else if(state is WeatherSuccess)
+        {
+         weatherModel = BlocProvider.of<WeatherCubit>(context).weatherModel;
+          return WeatherScreenBody();
+        }
+         else
+         {
+           return Center(
+             child: Text('there is an error ,try later'),
+           );
+         }
+
+      },
       ),
     );
   }

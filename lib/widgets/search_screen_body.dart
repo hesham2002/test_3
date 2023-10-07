@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_3/models/weather_model.dart';
-import 'package:test_3/screens/weather_info_details.dart';
+import 'package:test_3/cubits/weather_cubit/weather_cubit.dart';
 
-import '../cubits/get_weather_cubit/get_weather_cubit.dart';
 
 class SearchBody extends StatelessWidget {
-  const SearchBody({super.key});
 
+
+   SearchBody({super.key});
+   void Function(String)? onChanged;
+   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,10 +38,14 @@ class SearchBody extends StatelessWidget {
             height: 70,
           ),
           TextField(
+            controller: controller,
+            onChanged: onChanged,
+
             onSubmitted: (value) async {
-              var getWeatherCubit = BlocProvider.of<GetWeatherCubit>(context);
-                  getWeatherCubit.getWeather(location: value);
-             Navigator.pushNamed(context, 'WeatherInfoDetails');
+
+              BlocProvider.of<WeatherCubit>(context).getCurrentWeather(location: value);
+              Navigator.pushNamed(context, 'WeatherInfoDetails');
+
             },
             onTapOutside: (event) =>
                 FocusManager.instance.primaryFocus?.unfocus(),
@@ -68,4 +73,3 @@ class SearchBody extends StatelessWidget {
     );
   }
 }
-WeatherModel?weatherModel;
