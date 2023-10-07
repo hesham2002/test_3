@@ -7,8 +7,7 @@ class SearchBody extends StatelessWidget {
 
 
    SearchBody({super.key});
-   void Function(String)? onChanged;
-   TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,8 +37,7 @@ class SearchBody extends StatelessWidget {
             height: 70,
           ),
           TextField(
-            controller: controller,
-            onChanged: onChanged,
+
 
             onSubmitted: (value) async {
 
